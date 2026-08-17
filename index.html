@@ -2402,7 +2402,7 @@ const reRender=()=>{ if(STATE) renderAll(); };
     else if(e.key===' '){e.preventDefault(); togglePv();}
     else if(e.key==='Escape'){closePresent();} });
 }
-document.addEventListener('click',e=>{ const pill=e.target.closest('.wh-pill'); if(pill && !pill.classList.contains('grp')){ currentWH=pill.dataset.wh; if(STATE) renderAll(); } });
+document.addEventListener('click',e=>{ const pill=e.target.closest('.wh-pill'); if(pill && !pill.classList.contains('grp')){ currentWH=pill.dataset.wh; if(window.cloudLoadWeekPlan && currentWH!=='total') window.cloudLoadWeekPlan(currentWH, (typeof currentGroup!=='undefined'?currentGroup:'ebm')); if(STATE) renderAll(); } });
 document.addEventListener('click',e=>{ const gp=e.target.closest('#groupbar .grp'); if(gp){ applyGroup(gp.dataset.g); } });
 { const _d=$('btnDemo'); if(_d) _d.addEventListener('click',loadTestData); }
 document.addEventListener('click',e=>{ if(e.target.closest('#revealGolden')) revealGolden(); });
@@ -2774,6 +2774,7 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
       if(!prof.active){ rejectAccess('This account is not authorized yet. Ask the admin to enable it.'); return; }
       PROFILE={ id:user.id, email:prof.email||user.email, role:prof.role, programs:prof.programs||[], active:prof.active };
       try{ window.IS_ADMIN=(PROFILE.role==='admin'); window.IS_PRESENTER=(PROFILE.role==='presenter'); }catch(e){}
+      try{ window.cloudLoadWeekPlan((typeof currentWH!=='undefined'&&currentWH!=='total')?currentWH:'jackson','ebm'); }catch(e){}
       reveal();
     }catch(e){ agMsg('Sign-in problem: '+(e.message||e), true); }
   }
